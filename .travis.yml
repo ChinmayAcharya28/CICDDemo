@@ -74,3 +74,15 @@ after_success:
 
 after_failure: "cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.xml"
 
+before_deploy:
+      # Set up git user name and tag this commit
+      - git config --local user.name "chinmayacharya28"
+      - git config --local user.email "chinmayacharya28@gmail.com"
+      - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
+      - git tag $TRAVIS_TAG
+
+deploy:
+  provider: releases
+  api_key: "8522cfaa49578fa0c6247a88241e4b27427c6b1b"
+  file: builds
+  skip_cleanup: true
