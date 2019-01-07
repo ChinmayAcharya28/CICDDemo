@@ -57,14 +57,4 @@ before_install:
 after_success:
 - codecov
 after_failure: cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.xml
-before_deploy:
-- git config --local user.name "chinmayacharya28"
-- git config --local user.email "chinmayacharya28@gmail.com"
-- export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
-- git tag $TRAVIS_TAG
-deploy:
-  provider: releases
-  file: "builds"
-  skip_cleanup: true
-  api-key:
-    secure: fPWBom88QFLKzq3rsPR+phka4GffbiCmFo1c73igRGo5tP94pGkt0AJ7pyXzK51jc34jBHCadcmp4APgE3qyUSOkhE/kmWKsZmf9O4R3JvWIRAIp77vabeno34V5x2XHA3/mpQD+4nSyq8ZD7LYDQhIetFrteOWJ+nCW1dwSgBYhqqvoiESK8mRSfsRet9xj/DRA81uh3NP5FeqNyXPVcc5Fk952XHYrfZQPKVzru6ji1qgd1OapqEaM+5iHJuSvlO+P3M1NZIGGAHZ5gBhHTuSnRuBY4sxZJdrp/uueS+lJG2SuehGABmZA0TYa4LmchVJ384cTDkYufDaz/zfBK1ROf0ncJj1d/gduwQUDU3twi/soM6D5C19vYns2rXaVKCyL0vjmjtNqa+3LzGNME5y9HTqxkEIJNR0zs/ZIePomu6DXRiu562yAEJES7k994O4DxFi/Q7U1cgm26IV5xvbjjXJMMN+urNvl6/xHngEPmer/lx1527n3td0eCrpl+8UxUmGfyfgWTpkLE3aXIKuILOiOCT2/nJCIhOJuacyOxdcdsTwIwjwAfQTYivoZMey6b5WyYnZ+SXBVtT94W8GvQyub/aamehffT48jgszF7+Fl84utp9f4cTW9Db+ut7Ay3wN3B3obRLINVtLJ5z3MoeKwsHJ1DWmwTscv450=
+
