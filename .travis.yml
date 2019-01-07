@@ -83,6 +83,6 @@ before_deploy:
 
 deploy:
   provider: releases
-  api_key: "8522cfaa49578fa0c6247a88241e4b27427c6b1b"
+  api_key: "0ed0e1bacade3549dd723937407da49492c73484"
   file: builds
   skip_cleanup: true
