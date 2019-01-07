@@ -1,88 +1,70 @@
 language: android
 jdk: oraclejdk8
 sudo: false
-
 branches:
   only:
   - master
-
 notifications:
-    email:
-        - chinmayacharya28@gmail.com
-    on_success: always
-
+  email:
+  - chinmayacharya28@gmail.com
+  on_success: always
 env:
-    matrix:
-        - ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
-    global:
-        - ADB_INSTALL_TIMEOUT=20    #Time out to 10 mins
-
+  matrix:
+  - ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
+  global:
+  - ADB_INSTALL_TIMEOUT=20
 before_cache:
-    - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
-
+- rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 cache:
-  directories:      #Cache all dirs under .gradle folder
-    - $HOME/.gradle/daemon      #Cache daemon logs
-    - $HOME/.gradle/native      #Cache library downloaded from the gradle dependency
-    - $HOME/.gradle/wrapper     #Cache the gradle
-
+  directories:
+  - "$HOME/.gradle/daemon"
+  - "$HOME/.gradle/native"
+  - "$HOME/.gradle/wrapper"
 android:
-    update_sdk: true
-    components:
-        - platform-tools
-        - tools
-        - build-tools-27.0.3
-        - android-21
-        - android-27
-
-        # Additional components
-        - extra-google-google_play_services
-        - extra-google-m2repository
-        - extra-android-m2repository
-
-        #system images
-        - sys-img-armeabi-v7a-android-19
-        - sys-img-armeabi-v7a-android-21
-
+  update_sdk: true
+  components:
+  - platform-tools
+  - tools
+  - build-tools-27.0.3
+  - android-21
+  - android-27
+  - extra-google-google_play_services
+  - extra-google-m2repository
+  - extra-android-m2repository
+  - sys-img-armeabi-v7a-android-19
+  - sys-img-armeabi-v7a-android-21
 licenses:
-    - 'android-sdk-preview-license-52d11cd2'
-    - 'android-sdk-license-.+'
-    - 'google-gdk-license-.+'
-
+- android-sdk-preview-license-52d11cd2
+- android-sdk-license-.+
+- google-gdk-license-.+
 before_script:
-    - chmod +x gradlew      #Grand permissions
-    - android list targets
-    - echo no | android create avd --force --name test --target android-21 --abi armeabi-v7a
-    - emulator -avd test -no-skin -no-audio -no-window &
-    - android-wait-for-emulator
-
+- chmod +x gradlew
+- android list targets
+- echo no | android create avd --force --name test --target android-21 --abi armeabi-v7a
+- emulator -avd test -no-skin -no-audio -no-window &
+- android-wait-for-emulator
 script:
-    - echo "Travis branch is $TRAVIS_BRANCH"
-    - echo "Travis branch is in pull request $TRAVIS_PULL+REQUEST"
-    - android-wait-for-emulator
-    - adb devices   #Display list of devices
-    - adb shell input keyevent 82 &
-    - echo "y" | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2"
-    - echo "y" | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.0-alpha7"
-    - travis_wait 30 ./gradlew connectedCheck assembleDebug -PdisablePreDex
-
+- echo "Travis branch is $TRAVIS_BRANCH"
+- echo "Travis branch is in pull request $TRAVIS_PULL+REQUEST"
+- android-wait-for-emulator
+- adb devices
+- adb shell input keyevent 82 &
+- echo "y" | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2"
+- echo "y" | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.0-alpha7"
+- travis_wait 30 ./gradlew connectedCheck assembleDebug -PdisablePreDex
 before_install:
-    - pip install --user codecov    #Install codecov
-
+- pip install --user codecov
 after_success:
-    - codecov                       #Run codecov
-
-after_failure: "cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.xml"
-
+- codecov
+after_failure: cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.xml
 before_deploy:
-      # Set up git user name and tag this commit
-      - git config --local user.name "chinmayacharya28"
-      - git config --local user.email "chinmayacharya28@gmail.com"
-      - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
-      - git tag $TRAVIS_TAG
-
+- git config --local user.name "chinmayacharya28"
+- git config --local user.email "chinmayacharya28@gmail.com"
+- export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
+- git tag $TRAVIS_TAG
 deploy:
   provider: releases
-  api_key: "0ed0e1bacade3549dd723937407da49492c73484"
   file: builds
   skip_cleanup: true
+  api-key:
+    secure: ZsnCNtUxUbJthX2G3FKkfWGIDkc9XAPB7uxUim2QCxX1jLLcIToyCdKYDXGOaZnXsReaJw6X5c3KcvfXWPDiyFy/Lesil/eMAZyXhL42dTrnOGNPLTFUyeBJapMefqoDXXnoLvVxqbkAwvu6ZV65WD2zGzWkmScGZ9z7NZePVvV6Xrdq3/tNtQb7I3mPFohsIcmEOeThVS+JlLx0DSbxxeGnCuSkKNDc6XrhPUgbX1q8TJ68cY6XeD3WbOFNjHsB1+Ald5VxexPfagmOHs8apSSW08Th5QxrFvmJMe8DZI/ps0A2jzIz1ZBL+oZkyxnclgNpN57PlsJSpHk5QwrkV4e7mmGtcCrBfx+hAdE4GAul58eBXk0w+VlB4LsW1oiUziU5FVZUKjufpQwkuciMYNUgr2jewb8WBKOeTDSf+tqm5YPGN+AOEH1v0wXvCohxAbmhy/i1PNoTmAM9RCKW5yihjdIZrLZCG0GwUoHHCgp/iGeVtDyPiOhyD/hPTLFiqM4wcAC9w815FpUlMxy2/OT0D7VXVy9a6foUFESb7clycfw5yigSUEKVE+5Kj2h2T7pj9V5lxmvN7gg1lw5HmUB0OACGRJMgrWLfvoo72wLY8Fg0ZIINMUJTL+TWUvrO4q64kDG7lut1BcfH5i7+SGJlMd4MIVNDKqDC7XBiD+E=
