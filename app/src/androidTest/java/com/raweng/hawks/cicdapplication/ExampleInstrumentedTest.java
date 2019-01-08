@@ -23,4 +23,76 @@ public class ExampleInstrumentedTest {
 
         assertEquals("com.raweng.hawks.cicdapplication", appContext.getPackageName());
     }
+
+    @Test
+    public void test01_add(){
+        int i = 2;
+        int j = 2;
+
+        TestActivity activity = new TestActivity();
+        int expected = activity.addition(i, j);
+        int actual = i + j;
+
+        assertEquals(actual, expected);
+    }
+
+    @Test
+    public void test02_Multiplication(){
+        int i = 2;
+        int j = 2;
+
+        TestActivity activity = new TestActivity();
+        int expected = activity.multi(i, j);
+        int actual = i * j;
+
+        assertEquals(actual, expected);
+    }
+
+    @Test
+    public void test03_Minus(){
+        int i = 4;
+        int j = 2;
+
+        TestActivity activity = new TestActivity();
+        String expected = activity.minus(i, j);
+        String actual = "First Minus Me";
+
+        assertEquals(actual, expected);
+    }
+
+    @Test
+    public void test04_Minus(){
+        int i = 2;
+        int j = 4;
+
+        TestActivity activity = new TestActivity();
+        String expected = activity.minus(i, j);
+        String actual = "Second Minus Me";
+
+        assertEquals(actual, expected);
+    }
+
+    @Test
+    public void test05_Equal(){
+        int i = 2;
+        int j = 2;
+
+        TestActivity activity = new TestActivity();
+        String expected = activity.minus(i, j);
+        String actual = "Equal";
+
+        assertEquals(actual, expected);
+    }
+
+    @Test
+    public void test06_div(){
+        int i = 4;
+        int j = 2;
+
+        TestActivity activity = new TestActivity();
+        int expected = activity.divide(i, j);
+        int actual = i/j;
+
+        assertEquals(actual, expected);
+    }
 }
